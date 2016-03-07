@@ -544,6 +544,8 @@ namespace UserConfigParams
 
     PARAM_PREFIX bool m_no_start_screen   PARAM_DEFAULT( false );
 
+    PARAM_PREFIX bool m_connect_now       PARAM_DEFAULT( false );
+
     PARAM_PREFIX bool m_race_now          PARAM_DEFAULT( false );
 
     /** True to test funky ambient/diffuse/specularity in RGB &

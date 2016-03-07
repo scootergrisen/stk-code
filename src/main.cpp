@@ -185,6 +185,7 @@
 #include "replay/replay_play.hpp"
 #include "replay/replay_recorder.hpp"
 #include "states_screens/main_menu_screen.hpp"
+#include "states_screens/networking_lobby.hpp"
 #include "states_screens/register_screen.hpp"
 #include "states_screens/state_manager.hpp"
 #include "states_screens/user_screen.hpp"
@@ -533,6 +534,7 @@ void cmdLineHelp()
     // "                            n=2: recorded key strokes\n"
     "       --server=name      Start a server (not a playing client).\n"
     "       --lan-server=name  Start a LAN server (not a playing client).\n"
+    "       --connect-now=ip   Connect to a server with IP known now (in format x.x.x.x:xxx(port)).\n"
     "       --server-password= Sets a password for a server (both client&server).\n"
     "       --login=s          Automatically log in (set the login).\n"
     "       --password=s       Automatically log in (set the password).\n"
@@ -777,6 +779,23 @@ int handleCmdLine()
     // Networking command lines
     NetworkConfig::get()->
         setMaxPlayers(UserConfigParams::m_server_max_players);
+    if(CommandLine::has("--connect-now", &s))
+    {
+        UserConfigParams::m_connect_now = true;
+        TransportAddress ip(s);
+        TransportAddress me(2130706433/*127.0.0.1*/, 2757);
+        NetworkConfig::get()->setIsLAN();
+        NetworkConfig::get()->setIsServer(false);
+        NetworkConfig::get()->setMyAddress(me);
+        Log::info("main", "Try to connect to server '%s'.",
+            ip.toString().c_str());
+        irr::core::stringw name = StringUtils::utf8ToWide(ip.toString());
+        ServersManager::get()->addServer(new Server(name, /*lan*/true,
+                                         16, 0, ip)                   );
+        ServersManager::get()->setJoinedServer(0);
+        STKHost::create();
+
+    }
     if(CommandLine::has("--server", &s))
     {
         NetworkConfig::get()->setServerName(core::stringw(s.c_str()));
@@ -784,7 +803,7 @@ int handleCmdLine()
         NetworkConfig::get()->setIsWAN();
         STKHost::create();
         Log::info("main", "Creating a WAN server '%s'.", s.c_str());
-    } 
+    }
     if (CommandLine::has("--lan-server", &s))
     {
         NetworkConfig::get()->setServerName(core::stringw(s.c_str()));
@@ -1417,8 +1436,11 @@ int main(int argc, char *argv[] )
         {
             HardwareStats::reportHardwareStats();
         }
-
-        if(!UserConfigParams::m_no_start_screen)
+        if (UserConfigParams::m_connect_now)
+        {
+            NetworkingLobby::getInstance()->push();
+        }
+        else if(!UserConfigParams::m_no_start_screen)
         {
             // If there is a current player, it was saved in the config file,
             // so we immediately start the main menu (unless it was requested

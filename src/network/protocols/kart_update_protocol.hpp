@@ -20,8 +20,8 @@ private:
     /** Stores the last updated rotation for a kart. */
     std::vector<btQuaternion> m_next_quaternions;
 
-    /** True if a new update for the kart positions was received. */
-    bool m_was_updated;
+    /** True if a new update for each kart positions was received. */
+    std::vector<bool> m_need_update;
 
 public:
              KartUpdateProtocol();

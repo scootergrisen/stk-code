@@ -58,6 +58,29 @@ public:
     }   // TransportAddress(EnetAddress)
 
     // ------------------------------------------------------------------------
+    /** Construct a string of ip (x.x.x.x:xxx). */
+    TransportAddress(const std::string& str)
+    {
+        std::string combined = StringUtils::replace(str, ":", ".");
+        std::vector<uint32_t> ip = StringUtils::splitToUInt(combined, '.');
+        m_ip = 0;
+        m_port = 0;
+        if (ip.size() == 5)
+        {
+            m_ip += (ip[0] < 256 ? ip[0] * 256 * 256 * 256 : 0);
+            m_ip += (ip[1] < 256 ? ip[1] * 256 * 256 : 0);
+            m_ip += (ip[2] < 256 ? ip[2] * 256 : 0);
+            m_ip += (ip[3] < 256 ? ip[3] : 0);
+            m_port = (uint16_t)(ip[4] < 65536 ? ip[4] : 0);
+        }
+        else
+        {
+            m_ip   = 0;
+            m_port = 0;
+        }
+    }   // TransportAddress(string of ip)
+
+    // ------------------------------------------------------------------------
     ~TransportAddress() {}
     // ------------------------------------------------------------------------
 private:
