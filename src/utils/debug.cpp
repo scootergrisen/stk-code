@@ -1058,7 +1058,7 @@ bool handleContextMenuAction(s32 cmd_id)
                             "* <F6> - Parachute powerup | + <Ctrl> - Right side of kart view | + <Shift> - Explode kart\n"
                             "* <F7> - Plunger powerup | + <Ctrl> - Left side of kart view | + <Shift> - Scripting console\n"
                             "* <F8> - Swatter powerup | + <Ctrl> - Front of kart view | + <Shift> - Texture console\n"
-                            "* <F9> - Switch powerup | + <Ctrl> - Kart number slider | + <Shift> - Run cutscene(s)\n"
+                            "* <F9> - Swapper powerup | + <Ctrl> - Kart number slider | + <Shift> - Run cutscene(s)\n"
                             "* <F10> - Zipper powerup | + <Ctrl> - Powerup amount slider | + <Shift> - Toggle GUI\n"
                             "* <F11> - Save replay | + <Ctrl> - Save history | + <Shift> - Dump RTT\n"
                             "* <F12> - Show FPS | + <Ctrl> - Show other karts' powerups | + <Shift> - Show soccer player list\n"
@@ -1256,7 +1256,7 @@ bool onEvent(const SEvent &event)
             sub->addItem(L"Parachute (F6)", DEBUG_POWERUP_PARACHUTE );
             sub->addItem(L"Plunger (F7)", DEBUG_POWERUP_PLUNGER );
             sub->addItem(L"Swatter (F8)", DEBUG_POWERUP_SWATTER );
-            sub->addItem(L"Switch (F9)", DEBUG_POWERUP_SWITCH );
+            sub->addItem(L"Swapper (F9)", DEBUG_POWERUP_SWITCH );
             sub->addItem(L"Zipper (F10)", DEBUG_POWERUP_ZIPPER );
             sub->addItem(L"Nitro (Insert)", DEBUG_POWERUP_NITRO );
 
