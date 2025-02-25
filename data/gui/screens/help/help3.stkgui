@@ -78,7 +78,7 @@
                 <div width="100%" proportion="1" layout="horizontal-row">
                      <icon align="center" width="8%" height="100%" icon="gui/icons/rubber_ball-icon.png"/>
                      <spacer width="3%" height="100%"/>
-                     <bubble proportion="1" height="100%" text="Basket Ball - bounces after the leader, and might squash and slow down karts down on the way."/>
+                     <bubble proportion="1" height="100%" text="Basketball - bounces after the leader, and might squash and slow down karts down on the way."/>
                 </div>
 
                 <div width="100%" proportion="1" layout="horizontal-row">
