@@ -25,6 +25,7 @@
 #include "challenges/unlock_manager.hpp"
 #include "config/user_config.hpp"
 #include "graphics/camera/camera.hpp"
+#include "graphics/camera/camera_normal.hpp"
 #include "graphics/central_settings.hpp"
 #include "graphics/irr_driver.hpp"
 #include "graphics/material.hpp"
@@ -137,6 +138,7 @@ World::World() : WorldStatus()
     m_schedule_exit_race = false;
     m_schedule_tutorial  = false;
     m_is_network_world   = false;
+    m_snap_camera        = false;
 
     m_stop_music_when_dialog_open = true;
 
@@ -891,7 +893,11 @@ void World::resetAllKarts()
     {
         for(unsigned int i=0; i<Camera::getNumCameras(); i++)
         {
-            Camera::getCamera(i)->setInitialTransform();
+            Camera* cam = Camera::getCamera(i);
+            cam->setInitialTransform();
+            // Ensure that smoothed cameras start from a correct position
+            if (cam->isNormal())
+                dynamic_cast<CameraNormal*>(cam)->snapToPosition();
         }
     }
 }   // resetAllKarts
@@ -939,6 +945,7 @@ void World::moveKartTo(AbstractKart* kart, const btTransform &transform)
     Track::getCurrentTrack()->findGround(kart);
     Track::getCurrentTrack()->getCheckManager()->resetAfterKartMove(kart);
 
+    m_snap_camera = true;
 }   // moveKartTo
 
 // ----------------------------------------------------------------------------
@@ -1020,6 +1027,18 @@ void World::updateWorld(int ticks)
     {
         unpause();
         m_schedule_unpause = false;
+    }
+
+    if (m_snap_camera)
+    {
+        m_snap_camera = false;
+        for(unsigned int i=0; i<Camera::getNumCameras(); i++)
+        {
+            Camera* cam = Camera::getCamera(i);
+            // Ensure that smoothed cameras start from a correct position
+            if (cam->isNormal())
+                dynamic_cast<CameraNormal*>(cam)->snapToPosition();
+        }
     }
 
     // Don't update world if a menu is shown or the race is over.

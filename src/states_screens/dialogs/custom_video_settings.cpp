@@ -260,4 +260,3 @@ void CustomVideoSettingsDialog::updateActivation()
     getWidget<CheckBoxWidget>("lightscattering")->setActive(light);
 #endif
 }   // updateActivation
-
